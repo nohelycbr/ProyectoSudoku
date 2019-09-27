@@ -58,10 +58,10 @@ def VisualizaTabla_2(tabla,noModificables):
         for columna in fila:
             coordenada = str(i) +","+ str(j)
 
-            if coordenada not in noModificables:
-                fmto = fmto + " " + Fore.GREEN + str(columna)
+            if coordenada in noModificables:
+                fmto = fmto + " " + Fore.WHITE + str(columna)
             else:
-                fmto = fmto + " " + Fore.WHITE +str(columna)
+                fmto = fmto + " " + Fore.BLUE + str(columna)
 
             if j == 2 or j == 5 or j == 8:
                 fmto = fmto +Fore.WHITE+"|"
@@ -85,7 +85,98 @@ def obtenerNoModificables(tabla):
                 fila +=1
         return lista
 
+def comprobacion_filas (tabla):
+    bandera = True
 
-tabla = crear_tabla_vacia()
-noModificables = obtenerNoModificables(tabla)
+    for filas in tabla:
+
+        set_fila = set(filas)
+        regla_1 = len(set_fila) == 9
+        regla_2 = max(set_fila) ==9
+        regla_3 = min(set_fila) == 1
+
+        if (regla_1 and regla_2 and regla_3):
+            bandera = True
+        else:
+            bandera = False
+            return bandera
+            break;
+
+    return bandera
+
+def comprobacion_columnas (tabla):
+    transpuesta = []
+    # Se transpone la tabla para reutilizar la funcion de comprobacion_filas
+    for i in range(len(tabla)):
+        new_fila =[]
+        for j in range(len(tabla[0])):
+            new_fila.append(tabla[j][i])
+        transpuesta.append(new_fila)
+    # Se utiliza la funcion de comprobacion_filas y se regresa el resultado
+    bandera = comprobacion_filas(transpuesta)
+    return bandera
+
+def comprobacion_cuadrante (tabla):
+ #Se transforma cada cuadrante en una fila de la matriz para reutilizar la
+ #
+    cuadrantes = []
+    cuadrante_1 = []
+    cuadrante_2 = []
+    cuadrante_3 = []
+    cuadrante_4 = []
+    cuadrante_5 = []
+    cuadrante_6 = []
+    cuadrante_7 = []
+    cuadrante_8 = []
+    cuadrante_9 = []
+
+    for i in range (len(tabla)):
+        for j in range(len(tabla[0])):
+            if i<3:
+                if  j < 3:
+                    cuadrante_1.append(tabla[i][j])
+                elif j > 2 and j < 6:
+                    cuadrante_2.append(tabla[i][j])
+                elif j > 5 and j<9:
+                    cuadrante_3.append(tabla[i][j])
+            elif i>2 and i<6:
+                if j < 3:
+                    cuadrante_4.append(tabla[i][j])
+                elif j > 2 and j < 6:
+                    cuadrante_5.append(tabla[i][j])
+                elif j > 5 and j < 9:
+                    cuadrante_6.append(tabla[i][j])
+            elif i>5 and i<9:
+                if  j < 3:
+                    cuadrante_7.append(tabla[i][j])
+                elif j > 2 and j < 6:
+                    cuadrante_8.append(tabla[i][j])
+                elif j > 5 and j<9:
+                    cuadrante_9.append(tabla[i][j])
+
+    cuadrantes.append(cuadrante_1)
+    cuadrantes.append(cuadrante_2)
+    cuadrantes.append(cuadrante_3)
+    cuadrantes.append(cuadrante_4)
+    cuadrantes.append(cuadrante_5)
+    cuadrantes.append(cuadrante_6)
+    cuadrantes.append(cuadrante_7)
+    cuadrantes.append(cuadrante_8)
+    cuadrantes.append(cuadrante_9)
+
+    return comprobacion_filas(cuadrantes)
+
+def comprobar_tabla (tabla):
+    boolean_filas = comprobacion_filas(tabla)
+    boolean_columnas = comprobacion_columnas(tabla)
+    boolean_cuadrante = comprobacion_cuadrante(tabla)
+
+    return (boolean_filas and boolean_columnas and boolean_cuadrante)
+
+tabla = solucion()
+noModificables = obtenerNoModificables(crear_tabla_vacia())
 VisualizaTabla_2(tabla, noModificables)
+
+print(comprobar_tabla(tabla))
+
+

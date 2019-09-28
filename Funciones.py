@@ -330,3 +330,20 @@ def comprobar_llenado_tabla(tabla):
                 break;
 
     return bandera
+
+
+def IngresarCoordenadas(listaNM,XY, dato,tabla):
+    #Checar si se puede modificar
+    if XY in listaNM:
+        print("Esa celda no se puede modificar. Intenta con otra coordenada")
+    else:
+        tabla[int(XY.split(",")[0])][int(XY.split(",")[1])] = int(dato)
+    return tabla
+
+def EliminarCoordenada(listaNM,XY,tabla):
+    #Checar si se puede modificar
+    if XY in listaNM:
+        print("Esa celda no se puede modificar. Intenta con otra coordenada")
+    else:
+        tabla[int(XY.split(",")[0])][int(XY.split(",")[1])] = "*"
+    return tabla

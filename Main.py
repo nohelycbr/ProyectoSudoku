@@ -1,6 +1,5 @@
 import Funciones as fun
 import random
-from IPython import display
 from colorama import Cursor, init, Fore
 
 init()
@@ -55,41 +54,65 @@ noModificables = fun.obtenerNoModificables(tabla)
 
 fun.VisualizaTabla_2(tabla,noModificables)
 print(Fore.WHITE + "¡Que empiece el juego!")
+contador = 0
 
 while (fun.comprobar_llenado_tabla(tabla)):
-    print("Ingresa las coordenadas del dato:")
-    fila = input("Fila:")
-    columna = input("Columna:")
+    if contador == 0:
+        print("Ingresa las coordenadas del dato:")
+        fila = input("Fila:")
+        columna = input("Columna:")
 
-    if(fila.lower() == 'salir' or columna.lower()=='salir'):
-        print("Hasta pronto!")
-        break;
+        if(fila.lower() == 'salir' or columna.lower()=='salir'):
+            print("Hasta pronto!")
+            break;
 
-    coordenada = fila +","+ columna
+        coordenada = fila +","+ columna
+        dato = input("Ingresar dato: ")
+        #Comprobar si es una celda modificable
+        fun.IngresarCoordenadas(noModificables,coordenada,dato,tabla)
+        #Si es modificable, insertar el dato en la tabla
+        #De lo contrario, pedir de nuevo una coordenada
 
-    #Comprobar si es una celda modificable
-    #Si es modificable, insertar el dato en la tabla
-    #De lo contrario, pedir de nuevo una coordenada
+        fun.VisualizaTabla_2(tabla,noModificables)
+    else:
+        decision = input("1 - Eliminar, 2 - Modificar o Añadir Nuevo")
+        if decision == "1":
+            print("Ingresa las coordenadas del dato:")
+            fila = input("Fila:")
+            columna = input("Columna:")
+            coordenada = fila + "," + columna
+            if (fila.lower() == 'salir' or columna.lower() == 'salir'):
+                print("Hasta pronto!")
+                break;
+            fun.EliminarCoordenada(noModificables,coordenada,tabla)
+            fun.VisualizaTabla_2(tabla, noModificables)
+        elif decision == "2":
+            print("Ingresa las coordenadas del dato:")
+            fila = input("Fila:")
+            columna = input("Columna:")
+            coordenada = fila + "," + columna
+            if (fila.lower() == 'salir' or columna.lower() == 'salir'):
+                print("Hasta pronto!")
+                break;
+            dato = input("Ingresar dato: ")
+            fun.IngresarCoordenadas(noModificables,coordenada,dato,tabla)
+            fun.VisualizaTabla_2(tabla, noModificables)
+        else:
+            if decision.lower() == 'salir':
+                print("Hasta pronto!")
+                break;
+            else:
+                print("Error. Vuelve a intentar")
 
-    fun.VisualizaTabla_2(tabla,noModificables)
+    contador += 1
+
+
 
 #Si sale del while quiere decir que toda la tabla ya está llena
-
-print("Has terminado de llenar el sudoku, ¿Es tu respuesta final?")
-print("1.Si")
-print("2.No")
-
-
-
-casi_final = True
-while(casi_final):
-    respuesta = input()
-    if respuesta == "1":
-        solucion = fun.comprobar_tabla(tabla)
-        casi_final = False
-    elif respuesta == "2":
-        #Ciclo para modificar tabla
-        casi_final = False
+if (fun.comprobar_llenado_tabla(tabla) == False):
+    resultado = fun.comprobar_tabla(tabla)
+    if(resultado):
+        print("¡Felicidades, eres un champion!")
     else:
-        print("No te he entendido, vuelve a intentar")
+        print("Has perdido: Eres un L-O-S-E-R!")
 
